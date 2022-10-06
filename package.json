@@ -1,0 +1,39 @@
+{
+  "name": "yourprof",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2020-byte/YourProf_Server.git"
+  },
+  "keywords": [
+    "2020_byte"
+  ],
+  "author": "2020_byte",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2020-byte/YourProf_Server/issues"
+  },
+  "homepage": "https://github.com/2020-byte/YourProf_Server#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "helmet": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.23.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
