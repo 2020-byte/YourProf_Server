@@ -12,7 +12,7 @@ const validateRating = [
     body('review')
         .trim()
         .isLength({ min: 3 })
-        .withMessage('text should be at least 3 characters'),
+        .withMessage('Reivew should be at least 3 characters'),
     validate,
 ];
 
@@ -26,16 +26,16 @@ router.get('/:profId', profController.getProf);
 
 
 //POST /profs/:profId/ratings
-router.post('/:profId/ratings', validateRating, profController.createRating);
+router.post('/:profId/ratings', profController.createRating);
 
 
 //PUT /profs/:profId/ratings/:ratingId
-router.put('/profs/:profId/ratings/:ratingId', validateRating, profController.updateRating);
+router.put('/:profId/ratings/:ratingId', validateRating, profController.updateRating);
 
 
 
 //DELETE /profs/:profId/ratings/:ratingId
-router.delete('/profs/:profId/ratings/:ratingId', profController.deleteRating);
+router.delete('/:profId/ratings/:ratingId', profController.deleteRating);
 
 
 

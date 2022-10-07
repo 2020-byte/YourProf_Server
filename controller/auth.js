@@ -5,10 +5,17 @@ import { config } from '../config.js';
 
 export async function signup(req, res) {
     const { username, password, name, email } = req.body;
-    const found = await userRepository.findByUsername(username);
-    if (found) {
+    const foundUsername = await userRepository.findByUsername(username);
+    const foundEmail = await userRepository.findByEmail(email);
+    if (foundUsername) {
         return res.status(409).json({ message: `${username} already exists` });
     }
+    if (foundEmail) {
+        return res.status(409).json({ message: `${email} already exists` });
+    }
+
+
+
     const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
     const id = await userRepository.createUser({
         username,

@@ -15,7 +15,7 @@ export async function getProf(req, res) {
 
     const courses = await profRepository.getCoursesById(profId);
 
-    const ratings = await profRepository.getRatingById(profId);
+    const ratings = await profRepository.getRatingByProfId(profId);
 
 
     if (prof && courses && ratings)  {
@@ -29,7 +29,7 @@ export async function getProf(req, res) {
 
 export async function createRating(req, res) {
     const ratingInfo = req.body;
-    const rating = await tweetRepository.create(ratingInfo, req.userId);
+    const rating = await profRepository.create(ratingInfo, req.userId);
     res.status(201).json(rating);
 }
 
@@ -37,10 +37,13 @@ export async function updateRating(req, res) {
     const ratingId = req.params.ratingId;
     const ratingInfo = req.body;
     const rating = await profRepository.getRatingById(ratingId);
+    //여기서 현재 rating의 id로 현재 rating정보를 받고, 현재 rating의 id는 url에서 받음.
     if (!rating) {
         return res.status(404).json({ message: `Rating not found: ${ratingId}` });
     }
-    if (rating.userId !== req.userId) {
+    //TODO: 나중에 Auth 처리해주기
+    // if (rating.userId !== req.userId) 
+    if (!rating.userId) {
         return res.sendStatus(403);
     }
     const updated = await profRepository.update(ratingId, ratingInfo);
@@ -49,11 +52,14 @@ export async function updateRating(req, res) {
 
 export async function deleteRating(req, res) {
     const ratingId = req.params.ratingId;
-    const rating = await profRepository.getById(ratingId);
+    const rating = await profRepository.getRatingById(ratingId);
+    console.log(rating);
     if (!rating) {
         return res.status(404).json({ message: `Rating not found: ${ratingId}` });
     }
-    if (rating.userId !== req.userId) {
+    //TODO: 나중에 Auth 처리해주기
+    // if (rating.userId !== req.userId) 
+    if (!rating.userId) {
         return res.sendStatus(403);
     }
     await profRepository.remove(ratingId);

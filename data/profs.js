@@ -114,7 +114,7 @@ const Rating = sequelize.define('rating', {
         type: DataTypes.BOOLEAN,
         allowNull: true,
     },
-    attandance: {
+    attendance: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
     },
@@ -155,6 +155,7 @@ const Grade = sequelize.define('grade', {
 
 Prof.belongsTo(Department);
 Course.belongsTo(Prof);
+Course.belongsTo(Department);
 Rating.belongsTo(Prof);
 Rating.belongsTo(Course);
 Rating.belongsTo(User);
@@ -196,6 +197,8 @@ const COURSE_INCLUDE_PROF = {
     },
 }
 
+
+
 const RATING_INCLUDE_PROF_COURSE_GRADE_USER = {
     attributes: [
         'id',
@@ -207,12 +210,30 @@ const RATING_INCLUDE_PROF_COURSE_GRADE_USER = {
         'attendance',
         'review',
         'createdAt',
+        'updatedAt',
         'likes',
         'dislikes',
         'courseId',
         'profId',
         'gradeId',
         'userId',
+        [Sequelize.col('course.name'), 'coursename'],
+        [Sequelize.col('grade.name'), 'gradename'],
+        [Sequelize.col('prof.name'), 'profname'],
+    ],
+    include: [
+        {
+            model: Prof,
+            attributes: [],
+        },
+        {
+            model: Course,
+            attributes: [],
+        },
+        {
+            model: Grade,
+            attributes: [],
+        },
     ]
 }
 
@@ -252,6 +273,8 @@ export async function getProfById(id) {
     });
 }
 
+
+
 export async function getCoursesById(profId) {
     return  Course.findAll({
         ...COURSE_INCLUDE_PROF,
@@ -260,7 +283,9 @@ export async function getCoursesById(profId) {
     })
 }
 
-export async function getRatingById(profId) {
+
+
+export async function getRatingByProfId(profId) {
     return Rating.findAll({
         ...RATING_INCLUDE_PROF_COURSE_GRADE_USER,
         ORDER_DESC,
@@ -269,23 +294,63 @@ export async function getRatingById(profId) {
 }
 
 
+//TODO: userId 바꿔야 함!
 export async function create(ratingInfo, userId) {
-  return Rating.create({...ratingInfo, userId }) //
-    .then((data) => this.getById(data.dataValues.id));
+    const {
+        quality,
+        difficulty,
+        WTCA,
+        TFC,
+        textbook,
+        attendance,
+        review,
+        likes,
+        dislikes,
+        profId,
+        courseId,
+        gradeId,
+    } = ratingInfo;
+    return Rating.create({
+        quality,
+        difficulty,
+        WTCA,
+        TFC,
+        textbook,
+        attendance,
+        review,
+        likes,
+        dislikes,
+        profId,
+        courseId,
+        gradeId,
+        userId: 1 
+    }
+    ).then((data) => this.getRatingById(data.dataValues.id));
 }
 
+export async function getRatingById(id) {
+    return Rating.findOne({
+        ...RATING_INCLUDE_PROF_COURSE_GRADE_USER,
+        where: {id},
+    })
+}
+
+
+
 export async function update(ratingId, ratingInfo) {
-  return Rating.findByPk(ratingId) //
-    .then((rating) => {
-        rating.quality = ratingInfo.quality;
-        rating.difficulty = ratingInfo.difficulty;
-        rating.WTCA = ratingInfo.WTCA;
-        rating.TFC = ratingInfo.TFC;
-        rating.textbook = ratingInfo.textbook;
-        rating.attandance = ratingInfo.attandance;
-        rating.review = ratingInfo.review;
-        return rating.save();
-    });
+    return Rating.findByPk(ratingId) //
+        .then((rating) => {
+            rating.quality = ratingInfo.quality;
+            rating.difficulty = ratingInfo.difficulty;
+            rating.WTCA = ratingInfo.WTCA;
+            rating.TFC = ratingInfo.TFC;
+            rating.textbook = ratingInfo.textbook;
+            rating.attendance = ratingInfo.attendance;
+            rating.review = ratingInfo.review;
+            rating.gradeId = ratingInfo.gradeId;
+            return rating.save();
+        }
+    );
 }
 
 export async function remove(id) {
