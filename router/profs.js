@@ -16,9 +16,16 @@ const validateRating = [
     validate,
 ];
 
+//GET /profs/departments
+router.get('/departments', profController.getDepartments);
+
 //GET /profs
 //GET /profs?search?=:search
 router.get('/', profController.getProfs);
+
+//GET /profs/departments/:depId
+//GET /profs/departments/:depId/?search?=:search
+router.get('/departments/:depId', profController.getProfswithDepId);
 
 //GET /profs/:profId
 router.get('/:profId', profController.getProf);

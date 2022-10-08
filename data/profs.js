@@ -249,6 +249,10 @@ const ORDER_NAME_ASC = {
     order: [['name', 'ASC']],
 };
 
+export async function getAllDepartments() {
+    return Department.findAll({...ORDER_NAME_ASC });
+}
+
 export async function getAll() {
     return Prof.findAll({ ...PROF_INCLUDE_DEPARTMENT, ...ORDER_NAME_ASC });
 }
@@ -265,6 +269,28 @@ export async function getAllBySearch(search) {
         },
     });
 }
+
+export async function getAllwithDepId(depId) {
+    return Prof.findAll({
+        ...PROF_INCLUDE_DEPARTMENT,
+        ...ORDER_ID_ASC,
+        where: {
+            departmentId: depId
+        },
+    })
+}
+
+export async function getAllBySearchDepId(search, depId) {//매개변수를 swap해서 받아서 버그났었음. 이런 거 조심.
+    return Prof.findAll({
+        ...PROF_INCLUDE_DEPARTMENT,
+        ...ORDER_ID_ASC,
+        where: {
+            departmentId: depId,
+            name: { [Op.like]: `%${search}%` }
+        },
+    })
+}
+
 
 export async function getProfById(id) {
     return Prof.findOne({

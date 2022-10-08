@@ -1,11 +1,25 @@
 import * as profRepository from '../data/profs.js';
 
+export async function getDepartments(req, res) {
+    const data = await profRepository.getAllDepartments();
+    res.status(200).json(data);
+}
+
 
 export async function getProfs(req, res) {
     const search = req.query.search;
     const data = await (search
         ? profRepository.getAllBySearch(search)
         : profRepository.getAll());
+    res.status(200).json(data);
+}
+
+export async function getProfswithDepId(req, res) {
+    const search = req.query.search;
+    const depId = req.params.depId;
+    const data = await (search
+        ? profRepository.getAllBySearchDepId(search, depId)
+        : profRepository.getAllwithDepId(depId));
     res.status(200).json(data);
 }
 

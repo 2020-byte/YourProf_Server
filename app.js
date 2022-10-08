@@ -17,7 +17,7 @@ app.use(morgan('tiny'));
 
 app.use('/profs', profsRouter);
 app.use('/account', accountRouter);
-app.use('/', authRouter);
+app.use('/auth', authRouter);
 
 app.use((req, res, next) => {
     res.sendStatus(404);
