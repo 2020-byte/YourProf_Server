@@ -85,6 +85,7 @@ const Course =  sequelize.define('course', {
     }, { timestamps: false }
 )
 
+
 // 4) Rating Items
 const Rating = sequelize.define('rating', {
     id: {
@@ -102,6 +103,8 @@ const Rating = sequelize.define('rating', {
         allowNull: false,
         defaultValue: -1,
     },
+    
+    //TODO: allowNull false로 바꿔야함!
     WTCA: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
