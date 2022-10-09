@@ -260,7 +260,7 @@ export async function getAll() {
 export async function getAllBySearch(search) {
     return Prof.findAll({
         ...PROF_INCLUDE_DEPARTMENT,
-        ...ORDER_ID_ASC,
+        ...ORDER_NAME_ASC,
         // where: { 
         //     name: sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', '%' + search.toLowerCase() + '%')
         // },
@@ -271,21 +271,23 @@ export async function getAllBySearch(search) {
 }
 
 export async function getAllwithDepId(depId) {
+    const _depId = depId == 0? { [Op.gt]: 0 }: depId;
     return Prof.findAll({
         ...PROF_INCLUDE_DEPARTMENT,
-        ...ORDER_ID_ASC,
+        ...ORDER_NAME_ASC,
         where: {
-            departmentId: depId
+            departmentId: _depId
         },
     })
 }
 
 export async function getAllBySearchDepId(search, depId) {//매개변수를 swap해서 받아서 버그났었음. 이런 거 조심.
+    const _depId = depId == 0? { [Op.gt]: 0 }: depId;
     return Prof.findAll({
         ...PROF_INCLUDE_DEPARTMENT,
-        ...ORDER_ID_ASC,
+        ...ORDER_NAME_ASC,
         where: {
-            departmentId: depId,
+            departmentId: _depId,
             name: { [Op.like]: `%${search}%` }
         },
     })
@@ -318,6 +320,17 @@ export async function getRatingByProfId(profId) {
         where: {profId},
     })
 }
+
+
+export async function getRatingsByProfIdwithCourseId(profId, courseId) {
+    const _courseId = courseId == 0? { [Op.gt]: 0 }: courseId;
+    return Rating.findAll({
+        ...RATING_INCLUDE_PROF_COURSE_GRADE_USER,
+        ORDER_DESC,
+        where: {profId , courseId: _courseId},
+    })
+}
+
 
 
 //TODO: userId 바꿔야 함!

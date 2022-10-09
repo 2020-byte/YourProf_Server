@@ -24,11 +24,15 @@ router.get('/departments', profController.getDepartments);
 router.get('/', profController.getProfs);
 
 //GET /profs/departments/:depId
-//GET /profs/departments/:depId/?search?=:search
+//GET /profs/departments/:depId/?search=:search
 router.get('/departments/:depId', profController.getProfswithDepId);
 
 //GET /profs/:profId
 router.get('/:profId', profController.getProf);
+
+//GET /profs/:profId/courses/:courseId
+router.get('/:profId/courses/:courseId', profController.getRatings);
+
 
 
 

@@ -39,6 +39,19 @@ export async function getProf(req, res) {
     }
 }
 
+export async function getRatings(req, res) {
+    const profId = req.params.profId;
+    const courseId = req.params.courseId;
+    const ratings = await profRepository.getRatingsByProfIdwithCourseId(profId, courseId);
+
+    if (ratings)  {
+        res.status(200).json(ratings);
+    } else {
+        //profId, courseId 구분해서 에러 던져야 되는데 이거 나중에 고치기. 
+        //지금 당장은 course를 선택하려면 profId를 가진  url로 들어와야 되서 상관없지만.
+        res.status(404).json({message: `Prof id(${courseId}) not found`});
+    }
+}
 
 
 export async function createRating(req, res) {
