@@ -80,7 +80,6 @@ export async function updateRating(req, res) {
 export async function deleteRating(req, res) {
     const ratingId = req.params.ratingId;
     const rating = await profRepository.getRatingById(ratingId);
-    console.log(rating);
     if (!rating) {
         return res.status(404).json({ message: `Rating not found: ${ratingId}` });
     }
@@ -90,5 +89,9 @@ export async function deleteRating(req, res) {
         return res.sendStatus(403);
     }
     await profRepository.remove(ratingId);
-    res.sendStatus(204);
+
+
+    //TODO:DELETE res.json()를 못받아온다. 이거 알아보기!
+    res.status(204).json({message: 'deleted'});
+    //res.sendStatus(204);
 }
