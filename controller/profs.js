@@ -53,6 +53,16 @@ export async function getRatings(req, res) {
     }
 }
 
+export async function getRating(req, res) {
+    const ratingId = req.params.ratingId;
+    const rating = await profRepository.getRatingById(ratingId);
+    if (rating) {
+        res.status(200).json(rating);
+    } else {
+        res.status(404).json({message: `Rating id(${ratingId}) not found`});
+    }
+}
+
 
 export async function createRating(req, res) {
     const ratingInfo = req.body;
@@ -69,8 +79,8 @@ export async function updateRating(req, res) {
         return res.status(404).json({ message: `Rating not found: ${ratingId}` });
     }
     //TODO: 나중에 Auth 처리해주기
-    // if (rating.userId !== req.userId) 
-    if (!rating.userId) {
+    // if (rating.userId !== req.userId) //Done
+    if (rating.userId == req.userId) {
         return res.sendStatus(403);
     }
     const updated = await profRepository.update(ratingId, ratingInfo);
@@ -84,8 +94,8 @@ export async function deleteRating(req, res) {
         return res.status(404).json({ message: `Rating not found: ${ratingId}` });
     }
     //TODO: 나중에 Auth 처리해주기
-    // if (rating.userId !== req.userId) 
-    if (!rating.userId) {
+    // if (rating.userId !== req.userId) //Done 
+    if (rating.userId == req.userId) {
         return res.sendStatus(403);
     }
     await profRepository.remove(ratingId);

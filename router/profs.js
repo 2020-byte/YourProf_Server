@@ -8,13 +8,13 @@ import { validate } from '../middleware/validator.js';
 
 const router = express.Router();
 
-const validateRating = [
-    body('review')
-        .trim()
-        .isLength({ min: 3 })
-        .withMessage('Reivew should be at least 3 characters'),
-    validate,
-];
+// const validateRating = [
+//     body('review')
+//         .trim()
+//         .isLength({ min: 3 })
+//         .withMessage('Reivew should be at least 3 characters'),
+//     validate,
+// ];
 
 //GET /profs/departments
 router.get('/departments', profController.getDepartments);
@@ -33,20 +33,24 @@ router.get('/:profId', profController.getProf);
 //GET /profs/:profId/courses/:courseId
 router.get('/:profId/courses/:courseId', profController.getRatings);
 
+//GET /profs/:profId/ratings/:ratingId
+router.get('/:profId/ratings/:ratingId', profController.getRating);
+
+
 
 
 
 //POST /profs/:profId/ratings
-router.post('/:profId/ratings', profController.createRating);
+router.post('/:profId/ratings', isAuth, profController.createRating);
 
 
 //PUT /profs/:profId/ratings/:ratingId
-router.put('/:profId/ratings/:ratingId', validateRating, profController.updateRating);
+router.put('/:profId/ratings/:ratingId', isAuth, profController.updateRating);
 
 
 
 //DELETE /profs/:profId/ratings/:ratingId
-router.delete('/:profId/ratings/:ratingId', profController.deleteRating);
+router.delete('/:profId/ratings/:ratingId', isAuth, profController.deleteRating);
 
 
 

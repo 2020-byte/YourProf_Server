@@ -3,7 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import profsRouter from './router/profs.js';
-import accountRouter from './router/profs.js';
+import accountRouter from './router/accout.js';
 import authRouter from './router/auth.js';
 import { config } from './config.js';
 import { sequelize } from './db/database.js';
