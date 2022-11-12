@@ -55,7 +55,7 @@ const Prof = sequelize.define('prof', {
 );
 
 // 2) Department Items
-const Department = sequelize.define('department', {
+export const Department = sequelize.define('department', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -71,7 +71,7 @@ const Department = sequelize.define('department', {
 );
 
 // 3) Course Items
-const Course =  sequelize.define('course', {
+export const Course =  sequelize.define('course', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -87,7 +87,7 @@ const Course =  sequelize.define('course', {
 
 
 // 4) Rating Items
-const Rating = sequelize.define('rating', {
+export const Rating = sequelize.define('rating', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -202,7 +202,7 @@ const COURSE_INCLUDE_PROF = {
 
 
 
-const RATING_INCLUDE_PROF_COURSE_GRADE_USER = {
+export const RATING_INCLUDE_PROF_COURSE_GRADE_USER = {
     attributes: [
         'id',
         'quality',
@@ -240,7 +240,7 @@ const RATING_INCLUDE_PROF_COURSE_GRADE_USER = {
     ]
 }
 
-const ORDER_DESC = {
+export const ORDER_DESC = {
     order: [['createdAt', 'DESC']],
 };
 

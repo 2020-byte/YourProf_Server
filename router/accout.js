@@ -9,7 +9,7 @@ router.get('/profile', isAuth, accountController.getMyInfo);
 
 
 // //GET /profile/myrating
-// router.get('/profile/myrating', accountController.getMyRating);
+router.get('/profile/reviews', isAuth, accountController.getMyRatings);
 
 // //GET /profile/upvoterating
 // router.get('/profile/upvoterating', accountController.getUpVoteRating);
