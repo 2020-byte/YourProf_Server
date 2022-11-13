@@ -1,11 +1,38 @@
 import SQ from 'sequelize';
+import { Op } from "sequelize";
 import { sequelize } from '../db/database.js';
 const DataTypes = SQ.DataTypes;
 import { User } from './auth.js';
 import { Prof, Grade, Rating, Course, Department, ORDER_DESC} from './profs.js';
 const Sequelize = SQ.Sequelize;
 
+const IsLike = sequelize.define('isLike', {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            allowNull: false,
+            primaryKey: true,
+        },
+    },
+    { timestamps: false }
+)
 
+IsLike.belongsTo(Rating);
+IsLike.belongsTo(User);
+
+const IsDisLike = sequelize.define('isDisLike', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+    },
+},
+{ timestamps: false }
+)
+
+IsDisLike.belongsTo(Rating);
+IsDisLike.belongsTo(User);
 
 
 const userInfoWithoutPassword = {
@@ -65,7 +92,7 @@ export async function getMyInfo(userId) {
 export async function getMyRatings(userId) {
     const ratings = await Rating.findAll({
         ...RATING_INFO,
-        ORDER_DESC,
+        ...ORDER_DESC,
         where: { userId }
     });
 
@@ -75,8 +102,80 @@ export async function getMyRatings(userId) {
 export async function getMyRatingswithDepId(userId, departmentId) {
     const ratings = await Rating.findAll({
         ...RATING_INFO,
-        ORDER_DESC,
+        ...ORDER_DESC,
         where: { userId, '$Course.departmentId$': parseInt(departmentId) }
+    });
+
+    return ratings;
+}
+
+export async function getLikedRatings(userId) {
+    const data = await IsLike.findAll({
+        attributes: ['ratingId'],//안되면 오타확인해보기
+        ORDER_DESC,
+        where: { userId }
+    });
+
+    const ratingIds = data.map((i) => i.ratingId);
+
+    const ratings = await Rating.findAll({
+        ...RATING_INFO,
+        ...ORDER_DESC,
+        where: { id: {[Op.in]: ratingIds} }
+    });
+
+    return ratings;
+}
+
+export async function getLikedRatingswithDepId(userId, departmentId) {
+    const data = await IsLike.findAll({
+        attributes: ['ratingId'],//안되면 오타확인해보기
+        ORDER_DESC,
+        where: { userId }
+    });
+
+    const ratingIds = data.map((i) => i.ratingId);
+
+    const ratings = await Rating.findAll({
+        ...RATING_INFO,
+        ...ORDER_DESC,
+        where: { id: {[Op.in]: ratingIds}, '$Course.departmentId$': parseInt(departmentId) }
+    });
+
+    return ratings;
+}
+
+export async function getDisLikedRatings(userId) {
+    const data = await IsDisLike.findAll({
+        attributes: ['ratingId'],//안되면 오타 부터 의심해보기(attribute => attributes)
+        ORDER_DESC,
+        where: { userId }
+    });
+
+    const ratingIds = data.map((i) => i.ratingId);
+
+    const ratings = await Rating.findAll({
+        ...RATING_INFO,
+        ...ORDER_DESC,
+        where: { id: {[Op.in]: ratingIds} }
+    });
+
+    return ratings;
+}
+
+export async function getDisLikedRatingswithDepId(userId, departmentId) {
+    const data = await IsDisLike.findAll({
+        attributes: ['ratingId'],
+        ORDER_DESC,
+        where: { userId }
+    });
+
+    const ratingIds = data.map((i) => i.ratingId);
+
+    const ratings = await Rating.findAll({
+        ...RATING_INFO,
+        ...ORDER_DESC,
+        where: { id: {[Op.in]: ratingIds}, '$Course.departmentId$': parseInt(departmentId) }
     });
 
     return ratings;
