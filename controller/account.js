@@ -38,3 +38,13 @@ export async function getDisLikedRatings(req, res) {
         : accountRepository.getDisLikedRatings(userId));
     res.status(200).json(data);
 }
+
+export async function getBookmarks(req, res) {
+    const userId = req.userId;
+    const departmentId = req.params.departmentId;
+    
+    const data = await ((departmentId != undefined)
+        ?accountRepository.getBookmarkswithDepId(userId, departmentId)
+        : accountRepository.getBookmarks(userId));
+    res.status(200).json(data);
+}

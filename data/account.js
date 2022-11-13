@@ -3,7 +3,7 @@ import { Op } from "sequelize";
 import { sequelize } from '../db/database.js';
 const DataTypes = SQ.DataTypes;
 import { User } from './auth.js';
-import { Prof, Grade, Rating, Course, Department, ORDER_DESC} from './profs.js';
+import { Prof, Grade, Rating, Course, Department, ORDER_DESC, PROF_INCLUDE_DEPARTMENT, ORDER_NAME_ASC} from './profs.js';
 const Sequelize = SQ.Sequelize;
 
 const IsLike = sequelize.define('isLike', {
@@ -33,6 +33,20 @@ const IsDisLike = sequelize.define('isDisLike', {
 
 IsDisLike.belongsTo(Rating);
 IsDisLike.belongsTo(User);
+
+const Bookmark = sequelize.define('bookmark', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+    },
+},
+{ timestamps: false }
+)
+
+Bookmark.belongsTo(Prof);
+Bookmark.belongsTo(User);
 
 
 const userInfoWithoutPassword = {
@@ -111,7 +125,7 @@ export async function getMyRatingswithDepId(userId, departmentId) {
 
 export async function getLikedRatings(userId) {
     const data = await IsLike.findAll({
-        attributes: ['ratingId'],//안되면 오타확인해보기
+        attributes: ['ratingId'],//안되면 오타 부터 의심해보기(attribute => attributes)
         ORDER_DESC,
         where: { userId }
     });
@@ -129,7 +143,7 @@ export async function getLikedRatings(userId) {
 
 export async function getLikedRatingswithDepId(userId, departmentId) {
     const data = await IsLike.findAll({
-        attributes: ['ratingId'],//안되면 오타확인해보기
+        attributes: ['ratingId'],
         ORDER_DESC,
         where: { userId }
     });
@@ -147,7 +161,7 @@ export async function getLikedRatingswithDepId(userId, departmentId) {
 
 export async function getDisLikedRatings(userId) {
     const data = await IsDisLike.findAll({
-        attributes: ['ratingId'],//안되면 오타 부터 의심해보기(attribute => attributes)
+        attributes: ['ratingId'],
         ORDER_DESC,
         where: { userId }
     });
@@ -179,4 +193,40 @@ export async function getDisLikedRatingswithDepId(userId, departmentId) {
     });
 
     return ratings;
+}
+
+export async function getBookmarks(userId) {
+    const data = await Bookmark.findAll({
+        attributes: ['profId'],
+        ORDER_DESC,
+        where: { userId }
+    });
+
+    const profIds = data.map((i) => i.profId);
+
+    const profs = await Prof.findAll({
+        ...PROF_INCLUDE_DEPARTMENT,
+        ...ORDER_NAME_ASC,
+        where: { id: {[Op.in]: profIds} }
+    });
+
+    return profs;
+}
+
+export async function getBookmarkswithDepId(userId, departmentId) {
+    const data = await Bookmark.findAll({
+        attributes: ['profId'],
+        ORDER_DESC,
+        where: { userId }
+    });
+
+    const profIds = data.map((i) => i.profId);
+
+    const profs = await Prof.findAll({
+        ...PROF_INCLUDE_DEPARTMENT,
+        ...ORDER_NAME_ASC,
+        where: { id: {[Op.in]: profIds}, departmentId: parseInt(departmentId) }
+    });
+
+    return profs;
 }

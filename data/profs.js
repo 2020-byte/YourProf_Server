@@ -166,7 +166,7 @@ Rating.belongsTo(Grade);
 
 
 
-const PROF_INCLUDE_DEPARTMENT = {
+export const PROF_INCLUDE_DEPARTMENT = {
     attributes: [
         'id',
         'name',
@@ -248,7 +248,7 @@ const ORDER_ID_ASC = {
     order: [['id', 'ASC']],
 };
 
-const ORDER_NAME_ASC = {
+export const ORDER_NAME_ASC = {
     order: [['name', 'ASC']],
 };
 

@@ -8,27 +8,30 @@ const router = express.Router();
 router.get('/profile', isAuth, accountController.getMyInfo);
 
 
-//GET /profile/reviews/
+//GET /profile/reviews
 router.get('/profile/reviews/', isAuth, accountController.getMyRatings);
 //GET /profile/reviews/:departmentId
 router.get('/profile/reviews/:departmentId', isAuth, accountController.getMyRatings);
 
 
 
-//GET /profile/likes/
+//GET /profile/likes
 router.get('/profile/likes/', isAuth, accountController.getLikedRatings);
 //GET /profile/likes/:departmentId
 router.get('/profile/likes/:departmentId', isAuth, accountController.getLikedRatings);
 
-//GET /profile/dislikes/
+//GET /profile/dislikes
 router.get('/profile/dislikes', isAuth, accountController.getDisLikedRatings);
 
 //GET /profile/dislikes/:departmentId
 router.get('/profile/dislikes/:departmentId', isAuth, accountController.getDisLikedRatings);
 
 
-// //GET /bookmark
-// router.get('/bookmark', accountController.getBookmark);
+//GET /bookmark
+router.get('/bookmark', isAuth, accountController.getBookmarks);
+
+//GET /bookmark/:departmentId
+router.get('/bookmark/:departmentId', isAuth, accountController.getBookmarks);
 
 
 
