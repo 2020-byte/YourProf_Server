@@ -2,7 +2,7 @@ import SQ from 'sequelize';
 import { sequelize } from '../db/database.js';
 const DataTypes = SQ.DataTypes;
 import { User } from './auth.js';
-import { Rating, Course, Department, RATING_INCLUDE_PROF_COURSE_GRADE_USER, ORDER_DESC} from './profs.js';
+import { Prof, Grade, Rating, Course, Department, ORDER_DESC} from './profs.js';
 const Sequelize = SQ.Sequelize;
 
 
@@ -18,15 +18,43 @@ const userInfoWithoutPassword = {
 }
 
 const RATING_INFO = {
-    ...RATING_INCLUDE_PROF_COURSE_GRADE_USER,
+    attributes: [
+        'id',
+        'quality',
+        'difficulty',
+        'WTCA',
+        'TFC',
+        'textbook',
+        'attendance',
+        'review',
+        'createdAt',
+        'updatedAt',
+        'likes',
+        'dislikes',
+        'courseId',
+        'profId',
+        'gradeId',
+        'userId',
+        [Sequelize.col('course.name'), 'coursename'],
+        [Sequelize.col('grade.name'), 'gradename'],
+        [Sequelize.col('prof.name'), 'profname'],
+        [Sequelize.col('course.departmentId'), 'departmentId'],
+    ],
     include: [
         {
-            model: Department,
-            attributes: [
-                "id",
-                "name"
-            ],
-        }
+            model: Prof,
+            attributes: [],
+        },
+        {
+            model: Course,
+            include: [{
+                model: Department,
+            }],
+        },
+        {
+            model: Grade,
+            attributes: [],
+        },
     ]
 }
 
@@ -35,11 +63,21 @@ export async function getMyInfo(userId) {
 }
 
 export async function getMyRatings(userId) {
-    const ratings = Rating.findAll({
-        ...RATING_INCLUDE_PROF_COURSE_GRADE_USER,
+    const ratings = await Rating.findAll({
+        ...RATING_INFO,
         ORDER_DESC,
         where: { userId }
-    })
+    });
 
+    return ratings;
+}
 
+export async function getMyRatingswithDepId(userId, departmentId) {
+    const ratings = await Rating.findAll({
+        ...RATING_INFO,
+        ORDER_DESC,
+        where: { userId, '$Course.departmentId$': parseInt(departmentId) }
+    });
+
+    return ratings;
 }

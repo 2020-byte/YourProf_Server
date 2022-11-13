@@ -11,7 +11,7 @@ const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;
 
 // 1) Prof Items
-const Prof = sequelize.define('prof', {
+export const Prof = sequelize.define('prof', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -138,7 +138,7 @@ export const Rating = sequelize.define('rating', {
 })
 
 // 5) Grade Items
-const Grade = sequelize.define('grade', {
+export const Grade = sequelize.define('grade', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
