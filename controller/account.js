@@ -49,6 +49,14 @@ export async function getBookmarks(req, res) {
     res.status(200).json(data);
 }
 
+export async function getBookmark(req, res) {
+    const userId = req.userId;
+    const profId = req.params.profId;
+    const bookmark = await accountRepository.getBookmarkByUserIdandProfId(userId, profId);
+    res.status(200).json(bookmark);
+
+}
+
 export async function createBookmark(req, res) {
     const userId = req.userId;
     const profId = req.params.profId;
@@ -70,7 +78,7 @@ export async function deleteBookmark(req, res) {
     }
     await accountRepository.remove(bookmark.id);
 
-    res.status(204).json({ message: 'deleted' });
+    res.status(204).send();
     //TODO:message: deleted가 안나옴(해결)
     //=> json 204는 원래 content를 안보낸데
     //res.status(204).send() 이렇게 하는 게 맞는 것 같데.

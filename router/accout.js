@@ -28,10 +28,13 @@ router.get('/profile/dislikes/:departmentId', isAuth, accountController.getDisLi
 
 
 //GET /bookmark
-router.get('/bookmark', isAuth, accountController.getBookmarks);
+router.get('/bookmarks', isAuth, accountController.getBookmarks);
 
 //GET /bookmark/:departmentId
-router.get('/bookmark/:departmentId', isAuth, accountController.getBookmarks);
+router.get('/bookmarks/:departmentId', isAuth, accountController.getBookmarks);
+
+//GET /bookmark/:profId
+router.get('/bookmark/:profId', isAuth, accountController.getBookmark);
 
 //POST /bookmark/:profId
 router.post('/bookmark/:profId', isAuth, accountController.createBookmark);

@@ -243,6 +243,7 @@ export async function getBookmarkByUserIdandProfId(userId, profId) {
     })
 }
 
+
 export async function create(userId, profId) {
     return Bookmark.create({
         profId,
