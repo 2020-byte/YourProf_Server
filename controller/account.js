@@ -71,6 +71,8 @@ export async function deleteBookmark(req, res) {
     await accountRepository.remove(bookmark.id);
 
     res.status(204).json({ message: 'deleted' });
-    //TODO:message: deleted가 안나옴
+    //TODO:message: deleted가 안나옴(해결)
+    //=> json 204는 원래 content를 안보낸데
+    //res.status(204).send() 이렇게 하는 게 맞는 것 같데.
 
 }
