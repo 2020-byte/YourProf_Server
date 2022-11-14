@@ -23,6 +23,12 @@ router.get('/profile/likes/:departmentId', isAuth, accountController.getLikedRat
 //GET /like/:ratingId
 router.get('/like/:ratingId', isAuth, accountController.getLikedRating);
 
+//POST like/:ratingId
+router.post('/like/:ratingId', isAuth, accountController.createLike);
+
+//DELETE like/:ratingId
+router.delete('/like/:ratingId', isAuth, accountController.deleteLike);
+
 
 //GET /profile/dislikes
 router.get('/profile/dislikes', isAuth, accountController.getDisLikedRatings);
@@ -32,6 +38,12 @@ router.get('/profile/dislikes/:departmentId', isAuth, accountController.getDisLi
 
 //GET /dislike/:ratingId
 router.get('/dislike/:ratingId', isAuth, accountController.getDisLikedRating);
+
+//POST dislike/:ratingId
+router.post('/dislike/:ratingId', isAuth, accountController.createDisLike);
+
+//DELETE dislike/:ratingId
+router.delete('/dislike/:ratingId', isAuth, accountController.deleteDisLike);
 
 
 

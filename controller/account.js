@@ -32,10 +32,37 @@ export async function getLikedRatings(req, res) {
 export async function getLikedRating(req, res) {
     const userId = req.userId;
     const ratingId = req.params.ratingId;
-    const rating = await accountRepository.getLikedRatingByUserIdandRatingId(userId, ratingId);
-    res.status(200).json(rating);
+    const data = await accountRepository.getLikedRatingByUserIdandRatingId(userId, ratingId);
+    res.status(200).json(data);
 
 }
+
+export async function createLike(req, res) {
+    const userId = req.userId;
+    const ratingId = req.params.ratingId;
+    const data = await accountRepository.createLike(userId, ratingId);
+    res.status(201).json(data);
+
+}
+
+export async function deleteLike(req, res) {
+    const userId = req.userId;
+    const ratingId = req.params.ratingId;
+    const data = await accountRepository.getLikedRatingByUserIdandRatingId(userId, ratingId);
+    if (!data) {
+        return res.status(404).json({message: `Bookmark not found: ${ratingId}(ratingId)`});
+    }
+    
+    if (data.userId != userId) {
+        return res.sendStatus(403);
+    }
+    await accountRepository.removeLike(data.id);
+
+    res.status(204).send();
+
+}
+
+
 
 export async function getDisLikedRatings(req, res) {
     const userId = req.userId;
@@ -50,10 +77,39 @@ export async function getDisLikedRatings(req, res) {
 export async function getDisLikedRating(req, res) {
     const userId = req.userId;
     const ratingId = req.params.ratingId;
-    const rating = await accountRepository.getDisLikedRatingByUserIdandRatingId(userId, ratingId);
-    res.status(200).json(rating);
+    const data = await accountRepository.getDisLikedRatingByUserIdandRatingId(userId, ratingId);
+    res.status(200).json(data);
 
 }
+
+export async function createDisLike(req, res) {
+    const userId = req.userId;
+    const ratingId = req.params.ratingId;
+    const data = await accountRepository.createDisLike(userId, ratingId);
+    res.status(201).json(data);
+
+}
+
+export async function deleteDisLike(req, res) {
+    const userId = req.userId;
+    const ratingId = req.params.ratingId;
+    const data = await accountRepository.getDisLikedRatingByUserIdandRatingId(userId, ratingId);
+    if (!data) {
+        return res.status(404).json({message: `Bookmark not found: ${ratingId}(ratingId)`});
+    }
+    
+    if (data.userId != userId) {
+        return res.sendStatus(403);
+    }
+    await accountRepository.removeDisLike(data.id);
+
+    res.status(204).send();
+
+}
+
+
+
+
 
 export async function getBookmarks(req, res) {
     const userId = req.userId;
@@ -76,7 +132,7 @@ export async function getBookmark(req, res) {
 export async function createBookmark(req, res) {
     const userId = req.userId;
     const profId = req.params.profId;
-    const bookmark = await accountRepository.create(userId, profId);
+    const bookmark = await accountRepository.createBookmark(userId, profId);
     res.status(201).json(bookmark);
 
 }
@@ -92,7 +148,7 @@ export async function deleteBookmark(req, res) {
     if (bookmark.userId != userId) {
         return res.sendStatus(403);
     }
-    await accountRepository.remove(bookmark.id);
+    await accountRepository.removeBookmark(bookmark.id);
 
     res.status(204).send();
     //TODO:message: deleted가 안나옴(해결)

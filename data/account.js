@@ -165,6 +165,28 @@ export async function getLikedRatingByUserIdandRatingId(userId, ratingId) {
     })
 }
 
+
+export async function createLike(userId, ratingId) {
+    return IsLike.create({
+        ratingId,
+        userId
+    }
+    ).then((data) => this.getLikeById(data.dataValues.id));
+}
+
+export async function getLikeById(id) {
+    return IsLike.findOne({
+        where: {id},
+    })
+}
+
+export async function removeLike(id) {
+    return IsLike.findByPk(id) //
+    .then((like) => {
+        like.destroy();
+    });
+}
+
 export async function getDisLikedRatings(userId) {
     const data = await IsDisLike.findAll({
         attributes: ['ratingId'],
@@ -206,6 +228,30 @@ export async function getDisLikedRatingByUserIdandRatingId(userId, ratingId) {
         where: {ratingId, userId},
     })
 }
+
+export async function createDisLike(userId, ratingId) {
+    return IsDisLike.create({
+        ratingId,
+        userId
+    }
+    ).then((data) => this.getDisLikeById(data.dataValues.id));
+}
+
+export async function getDisLikeById(id) {
+    return IsDisLike.findOne({
+        where: {id},
+    })
+}
+
+export async function removeDisLike(id) {
+    return IsDisLike.findByPk(id) //
+    .then((like) => {
+        like.destroy();
+    });
+}
+
+
+
 
 export async function getBookmarks(userId) {
     const data = await Bookmark.findAll({
@@ -256,7 +302,7 @@ export async function getBookmarkByUserIdandProfId(userId, profId) {
 }
 
 
-export async function create(userId, profId) {
+export async function createBookmark(userId, profId) {
     return Bookmark.create({
         profId,
         userId
@@ -264,7 +310,7 @@ export async function create(userId, profId) {
     ).then((data) => this.getBookmarkById(data.dataValues.id));
 }
 
-export async function remove(id) {
+export async function removeBookmark(id) {
     return Bookmark.findByPk(id) //
     .then((bookmark) => {
         bookmark.destroy();
