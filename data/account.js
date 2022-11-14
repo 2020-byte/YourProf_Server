@@ -230,3 +230,30 @@ export async function getBookmarkswithDepId(userId, departmentId) {
 
     return profs;
 }
+
+export async function getBookmarkById(id) {
+    return Bookmark.findOne({
+        where: {id},
+    })
+}
+
+export async function getBookmarkByUserIdandProfId(userId, profId) {
+    return Bookmark.findOne({
+        where: {profId, userId},
+    })
+}
+
+export async function create(userId, profId) {
+    return Bookmark.create({
+        profId,
+        userId
+    }
+    ).then((data) => this.getBookmarkById(data.dataValues.id));
+}
+
+export async function remove(id) {
+    return Bookmark.findByPk(id) //
+    .then((bookmark) => {
+        bookmark.destroy();
+    });
+}

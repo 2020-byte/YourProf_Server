@@ -80,7 +80,7 @@ export async function updateRating(req, res) {
     }
     //TODO: 나중에 Auth 처리해주기
     // if (rating.userId !== req.userId) //Done
-    if (rating.userId == req.userId) {
+    if (rating.userId != req.userId) {
         return res.sendStatus(403);
     }
     const updated = await profRepository.update(ratingId, ratingInfo);
@@ -93,15 +93,17 @@ export async function deleteRating(req, res) {
     if (!rating) {
         return res.status(404).json({ message: `Rating not found: ${ratingId}` });
     }
-    //TODO: 나중에 Auth 처리해주기
+    //TODO: 나중에 Auth 처리해주기(해결됨)
     // if (rating.userId !== req.userId) //Done 
-    if (rating.userId == req.userId) {
+    if (rating.userId != req.userId) {
         return res.sendStatus(403);
     }
     await profRepository.remove(ratingId);
 
 
     //TODO:DELETE res.json()를 못받아온다. 이거 알아보기!
-    res.status(204).json({message: 'deleted'});
+    //(위에 rating.userId == req.userId 이렇게 해놨었음)
+    res.status(204).json({ message: 'deleted' });
+    //TODO:message: deleted가 안나옴
     //res.sendStatus(204);
 }

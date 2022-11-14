@@ -33,7 +33,11 @@ router.get('/bookmark', isAuth, accountController.getBookmarks);
 //GET /bookmark/:departmentId
 router.get('/bookmark/:departmentId', isAuth, accountController.getBookmarks);
 
+//POST /bookmark/:profId
+router.post('/bookmark/:profId', isAuth, accountController.createBookmark);
 
+//DELETE /bookmark/:profId
+router.delete('/bookmark/:profId', isAuth, accountController.deleteBookmark);
 
 
 

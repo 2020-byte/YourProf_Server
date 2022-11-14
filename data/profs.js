@@ -336,7 +336,7 @@ export async function getRatingsByProfIdwithCourseId(profId, courseId) {
 
 
 
-//TODO: userId 바꿔야 함!
+//TODO: userId 바꿔야 함!(바꿨음)
 export async function create(ratingInfo, userId) {
     const {
         quality,
@@ -365,7 +365,7 @@ export async function create(ratingInfo, userId) {
         profId,
         courseId,
         gradeId,
-        userId: 1 
+        userId: userId 
     }
     ).then((data) => this.getRatingById(data.dataValues.id));
 }

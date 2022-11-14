@@ -48,3 +48,29 @@ export async function getBookmarks(req, res) {
         : accountRepository.getBookmarks(userId));
     res.status(200).json(data);
 }
+
+export async function createBookmark(req, res) {
+    const userId = req.userId;
+    const profId = req.params.profId;
+    const bookmark = await accountRepository.create(userId, profId);
+    res.status(201).json(bookmark);
+
+}
+
+export async function deleteBookmark(req, res) {
+    const userId = req.userId;
+    const profId = req.params.profId;
+    const bookmark = await accountRepository.getBookmarkByUserIdandProfId(userId, profId);
+    if (!bookmark) {
+        return res.status(404).json({message: `Bookmark not found: ${profId}(profId)`});
+    }
+    
+    if (bookmark.userId != userId) {
+        return res.sendStatus(403);
+    }
+    await accountRepository.remove(bookmark.id);
+
+    res.status(204).json({ message: 'deleted' });
+    //TODO:message: deleted가 안나옴
+
+}
