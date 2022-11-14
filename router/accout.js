@@ -20,11 +20,19 @@ router.get('/profile/likes/', isAuth, accountController.getLikedRatings);
 //GET /profile/likes/:departmentId
 router.get('/profile/likes/:departmentId', isAuth, accountController.getLikedRatings);
 
+//GET /like/:ratingId
+router.get('/like/:ratingId', isAuth, accountController.getLikedRating);
+
+
 //GET /profile/dislikes
 router.get('/profile/dislikes', isAuth, accountController.getDisLikedRatings);
 
 //GET /profile/dislikes/:departmentId
 router.get('/profile/dislikes/:departmentId', isAuth, accountController.getDisLikedRatings);
+
+//GET /dislike/:ratingId
+router.get('/dislike/:ratingId', isAuth, accountController.getDisLikedRating);
+
 
 
 //GET /bookmark

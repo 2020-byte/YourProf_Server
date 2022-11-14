@@ -29,6 +29,14 @@ export async function getLikedRatings(req, res) {
     res.status(200).json(data);
 }
 
+export async function getLikedRating(req, res) {
+    const userId = req.userId;
+    const ratingId = req.params.ratingId;
+    const rating = await accountRepository.getLikedRatingByUserIdandRatingId(userId, ratingId);
+    res.status(200).json(rating);
+
+}
+
 export async function getDisLikedRatings(req, res) {
     const userId = req.userId;
     const departmentId = req.params.departmentId;
@@ -37,6 +45,14 @@ export async function getDisLikedRatings(req, res) {
         ?accountRepository.getDisLikedRatingswithDepId(userId, departmentId)
         : accountRepository.getDisLikedRatings(userId));
     res.status(200).json(data);
+}
+
+export async function getDisLikedRating(req, res) {
+    const userId = req.userId;
+    const ratingId = req.params.ratingId;
+    const rating = await accountRepository.getDisLikedRatingByUserIdandRatingId(userId, ratingId);
+    res.status(200).json(rating);
+
 }
 
 export async function getBookmarks(req, res) {

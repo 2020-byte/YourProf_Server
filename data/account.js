@@ -159,6 +159,12 @@ export async function getLikedRatingswithDepId(userId, departmentId) {
     return ratings;
 }
 
+export async function getLikedRatingByUserIdandRatingId(userId, ratingId) {
+    return IsLike.findOne({
+        where: {ratingId, userId},
+    })
+}
+
 export async function getDisLikedRatings(userId) {
     const data = await IsDisLike.findAll({
         attributes: ['ratingId'],
@@ -193,6 +199,12 @@ export async function getDisLikedRatingswithDepId(userId, departmentId) {
     });
 
     return ratings;
+}
+
+export async function getDisLikedRatingByUserIdandRatingId(userId, ratingId) {
+    return IsDisLike.findOne({
+        where: {ratingId, userId},
+    })
 }
 
 export async function getBookmarks(userId) {
