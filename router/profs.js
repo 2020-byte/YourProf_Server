@@ -30,6 +30,10 @@ router.get('/departments/:depId', profController.getProfswithDepId);
 //GET /profs/:profId
 router.get('/:profId', profController.getProf);
 
+//POST /profs/:profId
+router.post('/:profId', profController.addView);
+
+
 //GET /profs/:profId/courses/:courseId
 router.get('/:profId/courses/:courseId', profController.getRatings);
 

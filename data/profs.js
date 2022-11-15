@@ -402,3 +402,13 @@ export async function remove(id) {
     });
 }
 
+
+
+export async function updateProf(profId) {
+    return Prof.findByPk(profId) //
+        .then((prof) => {
+            prof.ratings++;
+            return prof.save();
+        }
+    );
+}

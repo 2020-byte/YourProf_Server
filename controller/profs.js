@@ -109,3 +109,14 @@ export async function deleteRating(req, res) {
     //res.status(204).send() 이렇게 하는 게 맞는 것 같데.
     //res.sendStatus(204);
 }
+
+
+export async function addView(req, res) {
+    const profId = req.params.profId;
+    const prof = await profRepository.getProfById(profId);
+    if (!prof) {
+        return res.status(404).json({ message: `Prof not found: ${profId}` });
+    }
+    const updated = await profRepository.updateProf(profId);
+    res.status(200).json(updated);
+}
