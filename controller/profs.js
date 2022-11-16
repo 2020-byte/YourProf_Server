@@ -98,7 +98,7 @@ export async function deleteRating(req, res) {
     if (rating.userId != req.userId) {
         return res.sendStatus(403);
     }
-    await profRepository.remove(ratingId);
+    await profRepository.remove(ratingId, rating.dataValues.profId);//sequelize에서 가져온거 dataValues붙여주는 거
 
 
     //TODO:DELETE res.json()를 못받아온다. 이거 알아보기!

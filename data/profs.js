@@ -367,8 +367,11 @@ export async function create(ratingInfo, userId) {
         gradeId,
         userId: userId 
     }
-    ).then((data) => this.getRatingById(data.dataValues.id));
+    ).then((data) => this.getRatingById(data.dataValues.id))
+    .then(() => reNewProf(ratingInfo.profId));
+    //얘는 여기가 create다음임. (길어서 잘봐야함)
 }
+
 
 export async function getRatingById(id) {
     return Rating.findOne({
@@ -390,16 +393,22 @@ export async function update(ratingId, ratingInfo) {
             rating.attendance = ratingInfo.attendance;
             rating.review = ratingInfo.review;
             rating.gradeId = ratingInfo.gradeId;
-            return rating.save();
+            return rating.save().then(() => reNewProf(ratingInfo.profId));
+            //callback 함수 then(() => {})
         }
     );
 }
 
-export async function remove(id) {
-  return Rating.findByPk(id) //
+export async function remove(id, profId) {
+    
+    console.log(profId);
+    return Rating.findByPk(id) //
     .then((rating) => {
-        rating.destroy();
-    });
+        rating.destroy().then(() => reNewProf(profId));
+        //destory()나 save(), create()(위에 create는 길이서 잘 봐야함) 바로 다음에 이게 끝나고
+        //사용가능한 함수를 넣는 거인듯.
+    })
+    
 }
 
 
@@ -411,4 +420,35 @@ export async function updateProf(profId) {
             return prof.save();
         }
     );
+}
+
+
+export async function reNewProf(profId) {
+
+    Rating.findOne({
+        attributes: [
+            'profId', 
+            [sequelize.fn('AVG', sequelize.col('quality')), 'qualityAvg'],
+            [sequelize.fn('AVG', sequelize.col('WTCA')), 'WTA_Avg'],
+            [sequelize.fn('AVG', sequelize.col('difficulty')), 'LOD_Avg'],
+            //rating에서랑 prof에서 이름이 달랐어
+        ],
+        group : ['profId'],
+        ORDER_DESC,
+        //raw: true, raw로 결과 받을 때 쓰는 것.
+        where: {profId},
+    }).then((data) => {
+        console.log(data);
+        //findAll로 하니까 하나의 객체가 아니라 배열안에 여러 개 객체로 되서 dataValues가 안먹힘.
+        Prof.findByPk(data?data.dataValues.profId:profId) //
+        .then((prof) => {
+            const quality = data?data.dataValues.qualityAvg: -1.0;
+            const WTA = data?data.dataValues.WTA_Avg*100: -1;
+            const LOD = data?data.dataValues.LOD_Avg: -1.0;
+            prof.quality = quality;
+            prof.WTA = WTA;
+            prof.LOD = LOD;
+            return prof.save();
+        });
+    })  
 }
